@@ -128,6 +128,17 @@ export default function App() {
   const [showExplanation, setShowExplanation] = useState(false);
   const [score, setScore] = useState(0);
 
+  // --- Auto-inject Tailwind for local development (FIXED STYLE ISSUE) ---
+  useEffect(() => {
+    const scriptId = 'tailwind-cdn';
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.src = "https://cdn.tailwindcss.com";
+      document.head.appendChild(script);
+    }
+  }, []);
+
   // --- Auth & Data Loading ---
   useEffect(() => {
     const initAuth = async () => {
