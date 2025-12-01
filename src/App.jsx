@@ -127,7 +127,6 @@ export default function App() {
   const [quizConfig, setQuizConfig] = useState({ version: 'A', difficulty: 'all' });
   const [showExplanation, setShowExplanation] = useState(false);
   const [score, setScore] = useState(0);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // --- Auto-inject Tailwind for local development (FIXED STYLE ISSUE) ---
   useEffect(() => {
@@ -237,49 +236,18 @@ export default function App() {
 
   const Navbar = () => (
     <nav className="bg-indigo-600 text-white shadow-lg sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
         <div className="flex items-center gap-2 cursor-pointer" onClick={goHome}>
           <BookOpen className="h-6 w-6 flex-shrink-0" />
           <span className="font-bold text-lg hidden sm:block">UAS Master</span>
         </div>
-        
-        {/* Desktop Menu */}
-        <div className="hidden md:flex gap-3 text-sm">
+        <div className="flex gap-2 sm:gap-3 text-sm items-center">
           <button onClick={goHome} className="hover:text-indigo-200 px-2 py-1">Home</button>
-          <button onClick={() => { setView('admin-login'); setMobileMenuOpen(false); }} className="hover:text-indigo-200 font-medium px-2 py-1">
+          <button onClick={() => setView('admin-login')} className="hover:text-indigo-200 font-medium px-2 py-1 whitespace-nowrap">
              {isAdmin ? 'Dashboard Admin' : 'Login Admin'}
           </button>
         </div>
-
-        {/* Mobile Menu Button */}
-        <button 
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 hover:bg-indigo-700 rounded"
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
       </div>
-
-      {/* Mobile Menu Dropdown */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-indigo-500 bg-indigo-700">
-          <div className="px-4 py-3 space-y-2">
-            <button 
-              onClick={() => { goHome(); setMobileMenuOpen(false); }} 
-              className="block w-full text-left hover:text-indigo-200 py-2"
-            >
-              Home
-            </button>
-            <button 
-              onClick={() => { setView('admin-login'); setMobileMenuOpen(false); }} 
-              className="block w-full text-left hover:text-indigo-200 font-medium py-2"
-            >
-              {isAdmin ? 'Dashboard Admin' : 'Login Admin'}
-            </button>
-          </div>
-        </div>
-      )}
     </nav>
   );
 
@@ -376,55 +344,55 @@ export default function App() {
     };
 
     return (
-      <div className="max-w-6xl mx-auto p-3 sm:p-4 md:p-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-4 sm:mb-6">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Panel Administrator</h2>
-          <button onClick={() => { setIsAdmin(false); goHome(); }} className="text-red-500 text-sm hover:text-red-700">Logout</button>
+      <div className="max-w-6xl mx-auto p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-6">
+          <h2 className="text-2xl font-bold text-gray-800">Panel Administrator</h2>
+          <button onClick={() => { setIsAdmin(false); goHome(); }} className="text-red-500 text-sm">Logout</button>
         </div>
 
-        <div className="flex gap-2 sm:gap-4 mb-4 sm:mb-6 border-b pb-1 overflow-x-auto" style={{scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
-          <button onClick={() => { setTab('courses'); setIsEditing(null); setFormData({}); }} className={`px-3 sm:px-4 py-2 text-sm sm:text-base font-medium whitespace-nowrap ${tab === 'courses' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500'}`}>Mata Kuliah</button>
-          <button onClick={() => { setTab('questions'); setIsEditing(null); setFormData({}); }} className={`px-3 sm:px-4 py-2 text-sm sm:text-base font-medium whitespace-nowrap ${tab === 'questions' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500'}`}>Bank Soal</button>
-          <button onClick={() => setTab('import')} className={`px-3 sm:px-4 py-2 text-sm sm:text-base font-medium whitespace-nowrap ${tab === 'import' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500'}`}>Import / Export</button>
+        <div className="flex gap-2 sm:gap-4 mb-6 border-b pb-1 overflow-x-auto">
+          <button onClick={() => { setTab('courses'); setIsEditing(null); setFormData({}); }} className={`px-3 sm:px-4 py-2 font-medium whitespace-nowrap ${tab === 'courses' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500'}`}>Mata Kuliah</button>
+          <button onClick={() => { setTab('questions'); setIsEditing(null); setFormData({}); }} className={`px-3 sm:px-4 py-2 font-medium whitespace-nowrap ${tab === 'questions' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500'}`}>Bank Soal</button>
+          <button onClick={() => setTab('import')} className={`px-3 sm:px-4 py-2 font-medium whitespace-nowrap ${tab === 'import' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500'}`}>Import / Export</button>
         </div>
 
         {/* --- COURSES TAB --- */}
         {tab === 'courses' && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-            <div className="md:col-span-1 bg-white p-3 sm:p-4 rounded-lg shadow h-fit">
-              <h3 className="font-bold mb-3 sm:mb-4 text-sm sm:text-base">{isEditing ? 'Edit Kuliah' : 'Tambah Kuliah'}</h3>
+            <div className="md:col-span-1 bg-white p-4 rounded-lg shadow h-fit">
+              <h3 className="font-bold mb-4">{isEditing ? 'Edit Kuliah' : 'Tambah Kuliah'}</h3>
               <input 
-                className="w-full border p-2 rounded mb-3 text-sm sm:text-base" 
+                className="w-full border p-2 rounded mb-3" 
                 placeholder="Kode (mis: IF101)" 
                 value={formData.code || ''} 
                 onChange={e => setFormData({...formData, code: e.target.value})}
               />
               <input 
-                className="w-full border p-2 rounded mb-3 text-sm sm:text-base" 
+                className="w-full border p-2 rounded mb-3" 
                 placeholder="Nama Mata Kuliah" 
                 value={formData.name || ''} 
                 onChange={e => setFormData({...formData, name: e.target.value})}
               />
               <div className="flex gap-2">
-                <button onClick={handleSaveCourse} className="bg-indigo-600 text-white px-3 sm:px-4 py-2 rounded flex-1 text-sm sm:text-base">Simpan</button>
-                {isEditing && <button onClick={() => {setIsEditing(null); setFormData({})}} className="bg-gray-300 px-3 sm:px-4 py-2 rounded text-sm sm:text-base">Batal</button>}
+                <button onClick={handleSaveCourse} className="bg-indigo-600 text-white px-4 py-2 rounded flex-1">Simpan</button>
+                {isEditing && <button onClick={() => {setIsEditing(null); setFormData({})}} className="bg-gray-300 px-4 py-2 rounded">Batal</button>}
               </div>
             </div>
 
-            <div className="md:col-span-2 space-y-2 sm:space-y-3">
+            <div className="md:col-span-2 space-y-3">
               {courses.map(c => (
-                <div key={c.id} className="bg-white p-3 sm:p-4 rounded-lg shadow flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div key={c.id} className="bg-white p-4 rounded-lg shadow flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-bold text-sm sm:text-base break-words">{c.name}</h4>
-                    <p className="text-xs sm:text-sm text-gray-500">{c.code}</p>
+                    <h4 className="font-bold break-words">{c.name}</h4>
+                    <p className="text-sm text-gray-500">{c.code}</p>
                   </div>
-                  <div className="flex gap-2 self-end sm:self-auto">
+                  <div className="flex gap-2 flex-shrink-0">
                     <button onClick={() => {setIsEditing(c.id); setFormData(c)}} className="p-2 text-blue-600 hover:bg-blue-50 rounded"><Edit2 size={18} /></button>
                     <button onClick={() => handleDeleteCourse(c.id)} className="p-2 text-red-600 hover:bg-red-50 rounded"><Trash2 size={18} /></button>
                   </div>
                 </div>
               ))}
-              {courses.length === 0 && <p className="text-gray-500 italic text-sm sm:text-base">Belum ada mata kuliah.</p>}
+              {courses.length === 0 && <p className="text-gray-500 italic text-center sm:text-left">Belum ada mata kuliah.</p>}
             </div>
           </div>
         )}
@@ -432,11 +400,11 @@ export default function App() {
         {/* --- QUESTIONS TAB --- */}
         {tab === 'questions' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-             <div className="lg:col-span-1 bg-white p-3 sm:p-4 rounded-lg shadow h-fit max-h-[85vh] overflow-y-auto sticky top-20 lg:top-24">
-              <h3 className="font-bold mb-3 sm:mb-4 text-sm sm:text-base">{isEditing ? 'Edit Soal' : 'Tambah Soal'}</h3>
+             <div className="lg:col-span-1 bg-white p-4 rounded-lg shadow h-fit max-h-[90vh] overflow-y-auto">
+              <h3 className="font-bold mb-4">{isEditing ? 'Edit Soal' : 'Tambah Soal'}</h3>
               
               <select 
-                className="w-full border p-2 rounded mb-3 text-sm sm:text-base" 
+                className="w-full border p-2 rounded mb-3" 
                 value={formData.courseId || ''} 
                 onChange={e => setFormData({...formData, courseId: e.target.value})}
               >
@@ -445,12 +413,12 @@ export default function App() {
               </select>
 
               <div className="flex gap-2 mb-3">
-                <select className="border p-2 rounded w-1/2 text-xs sm:text-sm" value={formData.version || 'A'} onChange={e => setFormData({...formData, version: e.target.value})}>
+                <select className="border p-2 rounded w-1/2" value={formData.version || 'A'} onChange={e => setFormData({...formData, version: e.target.value})}>
                   <option value="A">Versi A</option>
                   <option value="B">Versi B</option>
                   <option value="C">Versi C</option>
                 </select>
-                <select className="border p-2 rounded w-1/2 text-xs sm:text-sm" value={formData.difficulty || 'sedang'} onChange={e => setFormData({...formData, difficulty: e.target.value})}>
+                <select className="border p-2 rounded w-1/2" value={formData.difficulty || 'sedang'} onChange={e => setFormData({...formData, difficulty: e.target.value})}>
                   <option value="mudah">Mudah</option>
                   <option value="sedang">Sedang</option>
                   <option value="sulit">Sulit</option>
@@ -458,7 +426,7 @@ export default function App() {
               </div>
 
               <textarea 
-                className="w-full border p-2 rounded mb-3 h-24 text-xs sm:text-sm font-mono" 
+                className="w-full border p-2 rounded mb-3 h-24 text-sm font-mono" 
                 placeholder="Pertanyaan (Bisa pakai $LaTeX$)" 
                 value={formData.text || ''} 
                 onChange={e => setFormData({...formData, text: e.target.value})}
@@ -475,7 +443,7 @@ export default function App() {
                     className="flex-shrink-0"
                   />
                   <input 
-                    className="w-full border p-1.5 sm:p-2 rounded text-xs sm:text-sm" 
+                    className="w-full border p-1 rounded text-sm" 
                     placeholder={`Pilihan ${idx + 1}`}
                     value={formData.options?.[idx] || ''}
                     onChange={(e) => {
@@ -488,46 +456,46 @@ export default function App() {
               ))}
 
               <textarea 
-                className="w-full border p-2 rounded mb-3 h-20 text-xs sm:text-sm mt-2" 
+                className="w-full border p-2 rounded mb-3 h-20 text-sm mt-2" 
                 placeholder="Penjelasan / Pembahasan" 
                 value={formData.explanation || ''} 
                 onChange={e => setFormData({...formData, explanation: e.target.value})}
               />
 
               <div className="flex gap-2">
-                <button onClick={handleSaveQuestion} className="bg-indigo-600 text-white px-3 sm:px-4 py-2 rounded flex-1 text-sm sm:text-base">Simpan Soal</button>
-                {isEditing && <button onClick={() => {setIsEditing(null); setFormData({})}} className="bg-gray-300 px-3 sm:px-4 py-2 rounded text-sm sm:text-base">Batal</button>}
+                <button onClick={handleSaveQuestion} className="bg-indigo-600 text-white px-4 py-2 rounded flex-1">Simpan Soal</button>
+                {isEditing && <button onClick={() => {setIsEditing(null); setFormData({})}} className="bg-gray-300 px-4 py-2 rounded">Batal</button>}
               </div>
             </div>
 
-            <div className="lg:col-span-2 space-y-3 sm:space-y-4">
-              <div className="flex gap-2 mb-3 sm:mb-4">
+            <div className="lg:col-span-2 space-y-4">
+              <div className="flex gap-2 mb-4 items-center">
                 <Search size={20} className="text-gray-400 flex-shrink-0" />
                 <input 
                   placeholder="Cari soal..." 
-                  className="border-b focus:outline-none w-full text-sm sm:text-base"
+                  className="border-b focus:outline-none w-full"
                   onChange={(e) => { /* Implement search filter logic here later */}} 
                 />
               </div>
               {questions.map(q => {
                 const c = courses.find(c => c.id === q.courseId);
                 return (
-                  <div key={q.id} className="bg-white p-3 sm:p-4 rounded-lg shadow border-l-4 border-indigo-500">
+                  <div key={q.id} className="bg-white p-4 rounded-lg shadow border-l-4 border-indigo-500">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-start gap-2 mb-2">
                       <div className="text-xs font-bold text-indigo-600 uppercase tracking-wide break-words">
                         {c?.code} • Versi {q.version} • {q.difficulty}
                       </div>
-                      <div className="flex gap-2 self-end sm:self-auto">
+                      <div className="flex gap-2 flex-shrink-0">
                         <button onClick={() => {setIsEditing(q.id); setFormData(q)}} className="text-blue-500 hover:bg-blue-50 p-1 rounded"><Edit2 size={16} /></button>
                         <button onClick={() => handleDeleteQuestion(q.id)} className="text-red-500 hover:bg-red-50 p-1 rounded"><Trash2 size={16} /></button>
                       </div>
                     </div>
-                    <p className="font-medium text-gray-800 mb-2 text-sm sm:text-base break-words"><MathRenderer text={q.text} /></p>
-                    <p className="text-xs sm:text-sm text-gray-500 break-words">Jawaban: {q.options[q.correctIndex]}</p>
+                    <p className="font-medium text-gray-800 mb-2 break-words"><MathRenderer text={q.text} /></p>
+                    <p className="text-sm text-gray-500 break-words">Jawaban: {q.options[q.correctIndex]}</p>
                   </div>
                 )
               })}
-              {questions.length === 0 && <p className="text-gray-500 italic text-sm sm:text-base">Belum ada soal.</p>}
+              {questions.length === 0 && <p className="text-gray-500 italic text-center sm:text-left">Belum ada soal.</p>}
             </div>
           </div>
         )}
@@ -535,23 +503,23 @@ export default function App() {
         {/* --- IMPORT/EXPORT TAB --- */}
         {tab === 'import' && (
           <div className="bg-white p-4 sm:p-6 rounded-lg shadow">
-            <h3 className="font-bold text-base sm:text-lg mb-3 sm:mb-4">Backup & Restore Soal</h3>
+            <h3 className="font-bold text-lg mb-4 text-center sm:text-left">Backup & Restore Soal</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-              <div>
-                <h4 className="font-medium mb-2 flex items-center gap-2 text-sm sm:text-base"><Download size={18}/> Export Data</h4>
-                <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">Unduh semua soal dalam format JSON untuk backup atau diedit di text editor.</p>
-                <button onClick={handleExport} className="bg-green-600 hover:bg-green-700 text-white px-3 sm:px-4 py-2 rounded shadow text-sm sm:text-base w-full sm:w-auto">Download JSON</button>
+              <div className="flex flex-col items-center sm:items-start">
+                <h4 className="font-medium mb-2 flex items-center gap-2"><Download size={18}/> Export Data</h4>
+                <p className="text-sm text-gray-600 mb-4 text-center sm:text-left">Unduh semua soal dalam format JSON untuk backup atau diedit di text editor.</p>
+                <button onClick={handleExport} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow w-full sm:w-auto">Download JSON</button>
               </div>
-              <div>
-                <h4 className="font-medium mb-2 flex items-center gap-2 text-sm sm:text-base"><Upload size={18}/> Import Data</h4>
-                <p className="text-xs sm:text-sm text-gray-600 mb-2">Tempel (Paste) isi JSON di sini untuk mengembalikan data soal.</p>
+              <div className="flex flex-col items-center sm:items-start">
+                <h4 className="font-medium mb-2 flex items-center gap-2"><Upload size={18}/> Import Data</h4>
+                <p className="text-sm text-gray-600 mb-2 text-center sm:text-left">Tempel (Paste) isi JSON di sini untuk mengembalikan data soal.</p>
                 <textarea 
                   className="w-full border p-2 rounded text-xs font-mono h-32 mb-2" 
                   placeholder='[{"text": "Soal 1", ...}]'
                   value={importData}
                   onChange={e => setImportData(e.target.value)}
                 />
-                <button onClick={handleImport} className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded shadow text-sm sm:text-base w-full sm:w-auto">Import JSON</button>
+                <button onClick={handleImport} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow w-full sm:w-auto">Import JSON</button>
               </div>
             </div>
           </div>
@@ -566,13 +534,13 @@ export default function App() {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col">
         <Navbar />
-        <div className="flex-1 flex items-center justify-center p-4">
-          <div className="bg-white p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-md">
-            <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-center text-gray-800">Login Administrator</h2>
-            <p className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4 text-center">Masukkan kode akses untuk mengelola soal.</p>
+        <div className="flex-1 flex items-center justify-center p-4 sm:p-6">
+          <div className="bg-white p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-md mx-auto">
+            <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Login Administrator</h2>
+            <p className="text-sm text-gray-500 mb-4 text-center">Masukkan kode akses untuk mengelola soal.</p>
             <input 
               type="password" 
-              className="w-full border p-2.5 sm:p-3 rounded-lg mb-3 sm:mb-4 focus:ring-2 focus:ring-indigo-500 outline-none text-sm sm:text-base" 
+              className="w-full border p-3 rounded-lg mb-4 focus:ring-2 focus:ring-indigo-500 outline-none" 
               placeholder="Kode Akses (Default: admin123)"
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
@@ -585,7 +553,7 @@ export default function App() {
                 }
               }}
             />
-            <button onClick={() => setView('home')} className="w-full text-indigo-600 font-medium text-sm sm:text-base hover:text-indigo-700">Kembali ke Menu Utama</button>
+            <button onClick={() => setView('home')} className="w-full text-indigo-600 font-medium">Kembali ke Menu Utama</button>
           </div>
         </div>
       </div>
@@ -609,16 +577,16 @@ export default function App() {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col">
         <Navbar />
-        <div className="flex-1 max-w-3xl mx-auto w-full p-4">
+        <div className="flex-1 max-w-3xl mx-auto w-full p-4 sm:p-6">
           
           {/* Header Stats */}
-          <div className="bg-white p-3 sm:p-4 rounded-lg shadow mb-4 flex justify-between items-center sticky top-16 sm:top-20 z-40">
-            <div className="flex-1 min-w-0 pr-2">
-              <h2 className="font-bold text-gray-800 text-sm sm:text-base md:text-lg truncate">{activeCourse.name}</h2>
-              <div className="text-xs sm:text-sm text-gray-500">Soal {currentQuestionIndex + 1} dari {activeQuizQuestions.length}</div>
+          <div className="bg-white p-4 rounded-lg shadow mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sticky top-16 sm:top-20 z-40">
+            <div className="flex-1 min-w-0">
+              <h2 className="font-bold text-gray-800 break-words">{activeCourse.name}</h2>
+              <div className="text-sm text-gray-500">Soal {currentQuestionIndex + 1} dari {activeQuizQuestions.length}</div>
             </div>
             <div className="text-right flex-shrink-0">
-              <div className="text-xl sm:text-2xl font-bold text-indigo-600">{score}</div>
+              <div className="text-2xl font-bold text-indigo-600">{score}</div>
               <div className="text-xs text-gray-500 uppercase tracking-wide">Poin</div>
             </div>
           </div>
@@ -626,19 +594,19 @@ export default function App() {
           {/* Question Card */}
           <div className="bg-white rounded-lg shadow-lg overflow-hidden">
             <div className="p-4 sm:p-6 border-b">
-               <div className="flex justify-between items-center mb-3 sm:mb-4 flex-wrap gap-2">
+               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
                  <span className={`text-xs px-2 py-1 rounded font-bold uppercase ${currentQ.difficulty === 'mudah' ? 'bg-green-100 text-green-700' : currentQ.difficulty === 'sulit' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
                    {currentQ.difficulty}
                  </span>
-                 <span className="text-gray-400 text-xs sm:text-sm">Versi {currentQ.version}</span>
+                 <span className="text-gray-400 text-sm">Versi {currentQ.version}</span>
                </div>
-               <div className="text-base sm:text-lg md:text-xl font-medium text-gray-800 leading-relaxed break-words">
+               <div className="text-lg md:text-xl font-medium text-gray-800 leading-relaxed break-words">
                  <MathRenderer text={currentQ.text} />
                </div>
             </div>
 
             <div className="p-4 sm:p-6 bg-gray-50">
-              <div className="space-y-2 sm:space-y-3">
+              <div className="space-y-3">
                 {currentQ.options.map((opt, idx) => {
                   let btnClass = "w-full text-left p-3 sm:p-4 rounded-lg border-2 transition-all duration-200 flex items-center justify-between gap-2 ";
                   
@@ -661,13 +629,13 @@ export default function App() {
                       onClick={() => handleAnswer(idx)}
                       className={btnClass}
                     >
-                      <div className="flex items-start gap-2 sm:gap-3 flex-1 min-w-0">
+                      <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                          <span className="font-bold opacity-50 flex-shrink-0">{String.fromCharCode(65 + idx)}.</span>
-                         <span className="text-sm sm:text-base break-words flex-1"><MathRenderer text={opt} /></span>
+                         <span className="break-words flex-1"><MathRenderer text={opt} /></span>
                       </div>
                       <div className="flex-shrink-0">
-                        {hasAnswered && idx === currentQ.correctIndex && <CheckCircle size={18} className="sm:w-5 sm:h-5 text-green-600"/>}
-                        {hasAnswered && idx === userAnswer.selectedOption && idx !== currentQ.correctIndex && <XCircle size={18} className="sm:w-5 sm:h-5 text-red-600"/>}
+                        {hasAnswered && idx === currentQ.correctIndex && <CheckCircle size={20} className="text-green-600"/>}
+                        {hasAnswered && idx === userAnswer.selectedOption && idx !== currentQ.correctIndex && <XCircle size={20} className="text-red-600"/>}
                       </div>
                     </button>
                   );
@@ -677,21 +645,19 @@ export default function App() {
 
             {/* Explanation Section (Instant Feedback) */}
             {hasAnswered && (
-              <div className="p-4 sm:p-6 bg-blue-50 border-t border-blue-100">
-                <h4 className="font-bold text-blue-800 flex items-center gap-2 mb-2 text-sm sm:text-base">
+              <div className="p-4 sm:p-6 bg-blue-50 border-t border-blue-100 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <h4 className="font-bold text-blue-800 flex items-center gap-2 mb-2">
                   <BookOpen size={18}/> Pembahasan
                 </h4>
-                <div className="text-gray-700 text-xs sm:text-sm leading-relaxed break-words">
+                <div className="text-gray-700 text-sm leading-relaxed break-words">
                    {currentQ.explanation ? <MathRenderer text={currentQ.explanation} /> : "Tidak ada pembahasan detail untuk soal ini."}
                 </div>
-                <div className="mt-4 sm:mt-6 flex justify-end">
+                <div className="mt-4 sm:mt-6 flex justify-center sm:justify-end">
                    <button 
                     onClick={nextQuestion}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 sm:px-6 py-2 rounded-lg text-sm sm:text-base font-medium shadow-lg flex items-center gap-2"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 sm:px-6 py-2 rounded-lg font-medium shadow-lg flex items-center gap-2 w-full sm:w-auto justify-center"
                    >
-                     <span className="hidden sm:inline">{currentQuestionIndex < activeQuizQuestions.length - 1 ? "Soal Selanjutnya" : "Lihat Hasil Akhir"}</span>
-                     <span className="sm:hidden">{currentQuestionIndex < activeQuizQuestions.length - 1 ? "Lanjut" : "Hasil"}</span>
-                     <Play size={16} fill="currentColor"/>
+                     {currentQuestionIndex < activeQuizQuestions.length - 1 ? "Soal Selanjutnya" : "Lihat Hasil Akhir"} <Play size={16} fill="currentColor"/>
                    </button>
                 </div>
               </div>
@@ -709,34 +675,34 @@ export default function App() {
       <div className="min-h-screen bg-gray-50 flex flex-col">
         <Navbar />
         <div className="flex-1 max-w-4xl mx-auto w-full p-4 sm:p-6">
-          <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 text-center mb-4 sm:mb-6">
+          <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 text-center mb-6">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Hasil Latihan</h2>
-            <p className="text-gray-500 mb-4 sm:mb-6 text-sm sm:text-base">{activeCourse.name}</p>
+            <p className="text-gray-500 mb-4 sm:mb-6 break-words">{activeCourse.name}</p>
             
-            <div className="flex justify-center items-center gap-4 sm:gap-6 md:gap-8 mb-6 sm:mb-8 flex-wrap">
-              <div className="text-center flex-1 min-w-[80px]">
-                 <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-indigo-600 mb-1">{score}</div>
+            <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 md:gap-8 mb-6 sm:mb-8">
+              <div className="text-center flex-1 min-w-[100px]">
+                 <div className="text-4xl sm:text-5xl font-bold text-indigo-600 mb-1">{score}</div>
                  <div className="text-xs text-gray-500 uppercase">Benar</div>
               </div>
               <div className="h-12 sm:h-16 w-px bg-gray-200 hidden sm:block"></div>
-              <div className="text-center flex-1 min-w-[80px]">
-                 <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-400 mb-1">{activeQuizQuestions.length - score}</div>
+              <div className="text-center flex-1 min-w-[100px]">
+                 <div className="text-4xl sm:text-5xl font-bold text-gray-400 mb-1">{activeQuizQuestions.length - score}</div>
                  <div className="text-xs text-gray-500 uppercase">Salah</div>
               </div>
               <div className="h-12 sm:h-16 w-px bg-gray-200 hidden sm:block"></div>
-              <div className="text-center flex-1 min-w-[80px]">
-                 <div className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-1 ${percentage >= 80 ? 'text-green-500' : percentage >= 50 ? 'text-yellow-500' : 'text-red-500'}`}>{percentage}%</div>
+              <div className="text-center flex-1 min-w-[100px]">
+                 <div className={`text-4xl sm:text-5xl font-bold mb-1 ${percentage >= 80 ? 'text-green-500' : percentage >= 50 ? 'text-yellow-500' : 'text-red-500'}`}>{percentage}%</div>
                  <div className="text-xs text-gray-500 uppercase">Nilai</div>
               </div>
             </div>
 
-            <button onClick={goHome} className="bg-gray-800 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-medium hover:bg-black transition w-full sm:w-auto">
+            <button onClick={goHome} className="bg-gray-800 text-white px-6 py-3 rounded-lg font-medium hover:bg-black transition w-full sm:w-auto">
               Coba Latihan Lain
             </button>
           </div>
 
-          <div className="space-y-3 sm:space-y-4">
-            <h3 className="font-bold text-lg sm:text-xl text-gray-700 px-1">Review Jawaban</h3>
+          <div className="space-y-4">
+            <h3 className="font-bold text-xl text-gray-700 text-center sm:text-left">Review Jawaban</h3>
             {activeQuizQuestions.map((q, idx) => {
               const ua = userAnswers[q.id];
               const isCorrect = ua?.isCorrect;
@@ -745,25 +711,25 @@ export default function App() {
                 <div key={q.id} className={`bg-white p-4 sm:p-6 rounded-lg shadow border-l-4 ${isCorrect ? 'border-green-500' : 'border-red-500'}`}>
                   <div className="flex gap-3 sm:gap-4">
                     <div className="flex-shrink-0 mt-1">
-                      {isCorrect ? <CheckCircle className="text-green-500 w-5 h-5 sm:w-6 sm:h-6" /> : <XCircle className="text-red-500 w-5 h-5 sm:w-6 sm:h-6" />}
+                      {isCorrect ? <CheckCircle className="text-green-500" /> : <XCircle className="text-red-500" />}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-800 mb-2 text-sm sm:text-base break-words"><MathRenderer text={q.text} /></p>
+                      <p className="font-medium text-gray-800 mb-2 break-words"><MathRenderer text={q.text} /></p>
                       
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-3 sm:mt-4 text-xs sm:text-sm">
-                        <div className={`p-2 sm:p-3 rounded ${isCorrect ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-3 sm:mt-4 text-sm">
+                        <div className={`p-3 rounded ${isCorrect ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
                           <span className="font-bold block mb-1">Jawaban Kamu:</span>
                           <span className="break-words">{q.options[ua?.selectedOption]}</span>
                         </div>
                         {!isCorrect && (
-                          <div className="p-2 sm:p-3 rounded bg-green-50 border border-green-200">
+                          <div className="p-3 rounded bg-green-50 border border-green-200">
                              <span className="font-bold block mb-1">Jawaban Benar:</span>
                              <span className="break-words">{q.options[q.correctIndex]}</span>
                           </div>
                         )}
                       </div>
 
-                      <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-gray-50 rounded text-xs sm:text-sm text-gray-600">
+                      <div className="mt-3 sm:mt-4 p-3 bg-gray-50 rounded text-sm text-gray-600">
                         <strong className="block text-gray-500 text-xs uppercase mb-1">Pembahasan:</strong>
                         <div className="break-words"><MathRenderer text={q.explanation || "Tidak ada pembahasan."} /></div>
                       </div>
@@ -784,12 +750,12 @@ export default function App() {
       <Navbar />
       
       {/* Hero Section */}
-      <div className="bg-indigo-700 text-white py-8 sm:py-12 md:py-16 px-4">
+      <div className="bg-indigo-700 text-white py-12 sm:py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-3 sm:mb-4 px-2">Siap Hadapi UAS?</h1>
-          <p className="text-indigo-100 text-sm sm:text-base md:text-lg mb-6 sm:mb-8 px-2">Pilih mata kuliah, kerjakan soal latihan, dan dapatkan pembahasan instan untuk memperdalam pemahamanmu.</p>
+          <h1 className="text-3xl sm:text-4xl font-extrabold mb-4">Siap Hadapi UAS?</h1>
+          <p className="text-indigo-100 text-base sm:text-lg mb-6 sm:mb-8 px-2">Pilih mata kuliah, kerjakan soal latihan, dan dapatkan pembahasan instan untuk memperdalam pemahamanmu.</p>
           
-          <div className="bg-white p-1.5 sm:p-2 rounded-lg max-w-lg mx-auto flex shadow-xl">
+          <div className="bg-white p-2 rounded-lg max-w-lg mx-auto flex shadow-xl">
              <Search className="text-gray-400 m-2 sm:m-3 flex-shrink-0" size={20} />
              <input 
               placeholder="Cari mata kuliah..." 
@@ -798,31 +764,31 @@ export default function App() {
                  // Simple client side search visualization (actual filtering usually done in render)
               }}
              />
-             <button className="bg-indigo-600 text-white px-3 sm:px-6 py-2 rounded text-sm sm:text-base font-medium hover:bg-indigo-800 transition whitespace-nowrap">Cari</button>
+             <button className="bg-indigo-600 text-white px-4 sm:px-6 py-2 rounded font-medium hover:bg-indigo-800 transition text-sm sm:text-base whitespace-nowrap">Cari</button>
           </div>
         </div>
       </div>
 
       {/* Course List */}
-      <div className="flex-1 max-w-6xl mx-auto w-full p-4 sm:p-6 -mt-6 sm:-mt-10">
+      <div className="flex-1 max-w-6xl mx-auto w-full p-4 sm:p-6 -mt-8 sm:-mt-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {courses.map(course => (
-            <div key={course.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 transform hover:-translate-y-1">
+            <div key={course.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 flex flex-col">
               <div className="h-3 bg-indigo-500"></div>
-              <div className="p-4 sm:p-6">
+              <div className="p-4 sm:p-6 flex flex-col flex-1">
                 <div className="flex justify-between items-start mb-3 sm:mb-4">
-                  <div className="bg-indigo-50 text-indigo-700 font-bold px-2 sm:px-3 py-1 rounded text-xs sm:text-sm">
+                  <div className="bg-indigo-50 text-indigo-700 font-bold px-3 py-1 rounded text-sm">
                     {course.code}
                   </div>
                   <BarChart2 className="text-gray-300 flex-shrink-0" size={20} />
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-2" style={{display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'}}>{course.name}</h3>
-                <p className="text-gray-500 text-xs sm:text-sm mb-4 sm:mb-6">Latihan soal tersedia dalam berbagai tingkat kesulitan.</p>
+                <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-2 break-words">{course.name}</h3>
+                <p className="text-gray-500 text-sm mb-4 sm:mb-6">Latihan soal tersedia dalam berbagai tingkat kesulitan.</p>
                 
                 <div className="bg-gray-50 p-3 sm:p-4 rounded-lg mb-3 sm:mb-4">
                    <label className="text-xs font-bold text-gray-500 uppercase block mb-2">Pilih Versi Soal</label>
                    <select 
-                    className="w-full border-gray-300 border rounded p-2 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                    className="w-full border-gray-300 border rounded p-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
                     onChange={(e) => setQuizConfig({...quizConfig, version: e.target.value})}
                    >
                      <option value="A">Paket A</option>
@@ -834,7 +800,7 @@ export default function App() {
 
                 <button 
                   onClick={() => startQuiz(course, quizConfig.version, 'all')}
-                  className="w-full bg-indigo-600 text-white py-2.5 sm:py-3 rounded-lg text-sm sm:text-base font-bold hover:bg-indigo-700 flex items-center justify-center gap-2 transition"
+                  className="w-full bg-indigo-600 text-white py-3 rounded-lg font-bold hover:bg-indigo-700 flex items-center justify-center gap-2 transition mt-auto"
                 >
                   Mulai Latihan <ArrowLeft className="rotate-180" size={18} />
                 </button>
